@@ -1,36 +1,17 @@
 name: Build Android APK
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch: # يتيح لك تشغيل البناء يدوياً من واجهة GitHub
-
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1. جلب الكود من الريبو
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # 2. تنصيب بيئة فلاتر (التعديل هنا لحل مشكلتك)
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # نكتفي بتحديد القناة المستقرة
-          cache: true      # تفعيل الكاش لسرعة البناء المستقبلي
-
-      # 3. تحميل المكتبات
-      - name: Install dependencies
-        run: flutter pub get
-
-      # 4. بناء ملف APK بنسخة الـ Release
-      - name: Build APK
-        run: flutter build apk --release
-
-      # 5. رفع الملف الناتج لكي تتمكن من تحميله
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+          channel: 'stable'
+          cache: true
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
         with:
-          name: iptv-app-release
+          name: my-iptv-app
           path: build/app/outputs/flutter-apk/app-release.apk
